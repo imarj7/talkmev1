@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     console.log('Setting up socket...');
-    const newSocket = io('http://localhost:8080');
+    const newSocket = io('https://talkmev1.onrender.com');
     setSocket(newSocket);
 
     newSocket.emit('addUser', user?.id);
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const fetchConversations = async () => {
 	const loggedInUser = JSON.parse(localStorage.getItem('user:detail'));
-	const res = await fetch(`http://localhost:8000/api/conversations/${loggedInUser?.id}`, {
+	const res = await fetch(`https://talkmev1.onrender.com/api/conversations/${loggedInUser?.id}`, {
 	  method: 'GET',
 	  headers: {
 		'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const Dashboard = () => {
   
   useEffect(() => {
 	const fetchUsers = async () => {
-	  const res = await fetch(`http://localhost:8000/api/users/${user?.id}`, {
+	  const res = await fetch(`https://talkmev1.onrender.com/api/users/${user?.id}`, {
 		method: 'GET',
 		headers: {
 		  'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const Dashboard = () => {
 	let id = conversationId;
 	
 	if (conversationId === 'new') {
-	  const createConvoRes = await fetch(`http://localhost:8000/api/conversations`, {
+	  const createConvoRes = await fetch(`https://talkmev1.onrender.com/api/conversations`, {
 		method: 'POST',
 		headers: {
 		  'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ const Dashboard = () => {
 	}
   
 	// Fetch messages for the conversation
-	const res = await fetch(`http://localhost:8000/api/message/${id}?senderId=${user?.id}&receiverId=${receiver?.receiverId}`, {
+	const res = await fetch(`https://talkmev1.onrender.com/api/message/${id}?senderId=${user?.id}&receiverId=${receiver?.receiverId}`, {
 	  method: 'GET',
 	  headers: {
 		'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const Dashboard = () => {
 	socket?.emit('sendMessage', newMessage);
   
 	if (newMessage.conversationId === 'new') {
-	  const createConvoRes = await fetch(`http://localhost:8000/api/conversations`, {
+	  const createConvoRes = await fetch(`https://talkmev1.onrender.com/api/conversations`, {
 		method: 'POST',
 		headers: {
 		  'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const Dashboard = () => {
 	  newMessage.conversationId = createConvoData.conversationId;
 	}
   
-	await fetch(`http://localhost:8000/api/message`, {
+	await fetch(`https://talkmev1.onrender.com/api/message`, {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',
