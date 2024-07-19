@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const cors = require('cors');
-const io = require('socket.io')(8080, {
+const io = require('socket.io')(https://talkmev1.onrender.com, {
     cors: {
         origin: 'http://localhost:3000',
     }
