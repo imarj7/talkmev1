@@ -2,11 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const cors = require('cors');
-const io = require('socket.io')(https://talkmev1.onrender.com, {
-    cors: {
-        origin: 'https://talkmev1-f.onrender.com',
-    }
-});
+const http = require('http');
+const socketIO = require('socket.io');
 
 // Connect DB
 require('./db/connection');
@@ -22,13 +19,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.IO with the HTTP server
+const io = socketIO(server, {
+    cors: {
+        origin: 'https://talkmev1-f.onrender.com',
+    }
+});
+
 const port = process.env.PORT || 8000;
 
 // Socket.io
 let users = [];
-io.on('connection', socket => {
+io.on('connection', (socket) => {
     console.log('User connected', socket.id);
-    socket.on('addUser', userId => {
+    socket.on('addUser', (userId) => {
         console.log('Adding user: ', userId);
         const isUserExist = users.find(user => user.userId === userId);
         if (!isUserExist) {
@@ -73,9 +80,7 @@ io.on('connection', socket => {
 // Routes
 app.get('/', (req, res) => {
     res.send('Welcome');
-})
-
-app.use(express.json()); 
+});
 
 app.post('/api/register', async (req, res) => {
     try {
@@ -99,7 +104,6 @@ app.post('/api/register', async (req, res) => {
         // Generate a token
         const token = jwt.sign({ userId: newUser._id, email: newUser.email }, "Lifeisunfair", { expiresIn: '1h' });
 
-
         // Log the token to debug
         console.log('Generated Token:', token);
 
@@ -118,6 +122,7 @@ app.post('/api/register', async (req, res) => {
         return res.status(500).send('Server error');
     }
 });
+
 app.post('/api/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -136,24 +141,23 @@ app.post('/api/login', async (req, res, next) => {
                     const payload = {
                         userId: user._id,
                         email: user.email
-                    }
+                    };
                     const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'Lifeisunfair';
 
                     jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: 84600 }, async (err, token) => {
                         await Users.updateOne({ _id: user._id }, {
                             $set: { token }
-                        })
+                        });
                         user.save();
-                        return res.status(200).json({ user: { id: user._id, email: user.email, fullName: user.fullName }, token: token })
-                    })
+                        return res.status(200).json({ user: { id: user._id, email: user.email, fullName: user.fullName }, token: token });
+                    });
                 }
             }
         }
-
     } catch (error) {
-        console.log(error, 'Error')
+        console.log(error, 'Error');
     }
-})
+});
 
 app.post('/api/conversations', async (req, res) => {
     try {
@@ -166,7 +170,6 @@ app.post('/api/conversations', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
 
 app.get('/api/conversations/:userId', async (req, res) => {
     try {
@@ -183,7 +186,6 @@ app.get('/api/conversations/:userId', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
 
 app.post('/api/message', async (req, res) => {
     try {
@@ -206,7 +208,6 @@ app.post('/api/message', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
 
 app.get('/api/message/:conversationId', async (req, res) => {
     try {
@@ -235,20 +236,20 @@ app.get('/api/message/:conversationId', async (req, res) => {
     }
 });
 
-
 app.get('/api/users/:userId', async (req, res) => {
     try {
         const userId = req.params.userId;
         const users = await Users.find({ _id: { $ne: userId } });
-        const usersData = Promise.all(users.map(async (user) => {
-            return { user: { email: user.email, fullName: user.fullName, receiverId: user._id } }
-        }))
-        res.status(200).json(await usersData);
+        const usersData = await Promise.all(users.map(async (user) => {
+            return { user: { email: user.email, fullName: user.fullName, receiverId: user._id } };
+        }));
+        res.status(200).json(usersData);
     } catch (error) {
-        console.log('Error', error)
+        console.log('Error', error);
     }
-})
+});
 
-app.listen(port, () => {
+// Start the server
+server.listen(port, () => {
     console.log('listening on port ' + port);
-})
+});
