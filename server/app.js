@@ -4,7 +4,7 @@ const bcryptjs = require('bcryptjs');
 const cors = require('cors');
 const io = require('socket.io')(https://talkmev1.onrender.com, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'https://talkmev1-f.onrender.com',
     }
 });
 
