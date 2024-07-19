@@ -4,6 +4,7 @@ const bcryptjs = require('bcryptjs');
 const cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
+const path = require('path');
 
 // Connect DB
 require('./db/connection');
@@ -76,6 +77,9 @@ io.on('connection', (socket) => {
         io.emit('getUsers', users);
     });
 });
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Routes
 app.get('/', (req, res) => {
@@ -249,7 +253,10 @@ app.get('/api/users/:userId', async (req, res) => {
     }
 });
 
-// Start the server
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 server.listen(port, () => {
     console.log('listening on port ' + port);
 });
