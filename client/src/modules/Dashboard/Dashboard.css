@@ -1,0 +1,29 @@
+.sidebar {
+  position: fixed;
+  right: -25%;
+  transition: right 0.5s ease;
+  border-radius: 20px;
+  border:2px solid #ffd500;
+}
+.bg-image {
+  background-image: url('../../assets/img2/2.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.sidebar.open {
+  right: 0%;
+}
+
+.flex {
+  transition: margin-right 0.5s ease;
+}
+
+.flex.open {
+  margin-right: 25%;
+}
+.message-content {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
