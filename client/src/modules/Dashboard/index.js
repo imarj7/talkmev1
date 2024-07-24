@@ -230,11 +230,11 @@ const Dashboard = () => {
         <div className="absolute top-0 right-0">
           <img src="favicon.png" alt="Logo" className="w-[65px] h-18" />
         </div>
-        <div className="p-20">
+        <div className="p-16">
           {
             messages?.messages?.length > 0 ?
               messages.messages.map(({ message, user: { id } = {} }, index) => (
-                <div className={`max-w-[55%] h-auto font-small rounded-b-xl p-4 mb-9 text-white ${id === user?.id ? 'ml-auto bg-blacky text-white rounded-tl-xl' : 'mr-auto bg-light rounded-tr-xl text-primary'}`} key={index}>
+                <div className={`max-w-auto h-auto font-small rounded-b-xl p-2 mb-6 text-white ${id === user?.id ? 'ml-auto bg-blacky text-white rounded-tl-xl' : 'mr-auto bg-light rounded-tr-xl text-primary'}`} key={index}>
                   <div className="message-content">
                   {message}
                   </div>
