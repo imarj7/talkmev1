@@ -234,7 +234,7 @@ const Dashboard = () => {
           {
             messages?.messages?.length > 0 ?
               messages.messages.map(({ message, user: { id } = {} }, index) => (
-                <div className={`max-w-auto h-auto font-small rounded-b-xl p-2 mb-6 text-white ${id === user?.id ? 'ml-auto bg-blacky text-white rounded-tl-xl' : 'mr-auto bg-light rounded-tr-xl text-primary'}`} key={index}>
+                <div className={`max-w-[40%] h-auto font-small rounded-b-xl p-2 mb-6 text-white ${id === user?.id ? 'ml-auto bg-blacky text-white rounded-tl-xl' : 'mr-auto bg-light rounded-tr-xl text-primary'}`} key={index}>
                   <div className="message-content">
                   {message}
                   </div>
