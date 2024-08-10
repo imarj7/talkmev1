@@ -179,7 +179,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className='flex justify-center items-center min-h-[100vh] '>
+    <div className='flex justify-center items-center min-h-[100vh] bg-image'>
   <div className="flex relative w-[90%] h-[90vh] shadow-lg  border border-main rounded-3xl overflow-none">
     {/* Left Section */}
     <div className="w-[35%] h-full bg-secondary border-r-2 border-main rounded-3xl ">
